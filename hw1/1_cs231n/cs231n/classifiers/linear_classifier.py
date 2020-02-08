@@ -45,7 +45,15 @@ class LinearClassifier:
       # Hint: Use np.random.choice to generate indices. Sampling with         #
       # replacement is faster than sampling without replacement.              #
       #########################################################################
-      pass
+      X_batch = None
+      y_batch = None
+
+      indices = np.random.choice(num_train, batch_size, replace = True)
+      #print(indices)
+      X_batch = X[:, indices]
+      #print(X_batch)
+      y_batch = y[indices]
+      #print(y_batch)
       #########################################################################
       #                       END OF YOUR CODE                                #
       #########################################################################
@@ -53,13 +61,15 @@ class LinearClassifier:
       # evaluate loss and gradient
       loss, grad = self.loss(X_batch, y_batch, reg)
       loss_history.append(loss)
-
+      #print(loss)
       # perform parameter update
       #########################################################################
       # TODO:                                                                 #
       # Update the weights using the gradient and the learning rate.          #
       #########################################################################
-      pass
+      #print(self.W)
+      self.W -= learning_rate * grad
+      #print(self.W)
       #########################################################################
       #                       END OF YOUR CODE                                #
       #########################################################################
@@ -87,7 +97,9 @@ class LinearClassifier:
     # TODO:                                                                   #
     # Implement this method. Store the predicted labels in y_pred.            #
     ###########################################################################
-    pass
+    
+    y_pred = np.argmax(np.dot(self.W, X), axis = 0)
+    
     ###########################################################################
     #                           END OF YOUR CODE                              #
     ###########################################################################
@@ -105,7 +117,7 @@ class LinearClassifier:
 
     Returns: A tuple containing:
     - loss as a single float
-    - gradient with respect to self.W; an array of the same shape as W
+    - gradient with respect00 to self.W; an array of the same shape as W
     """
     pass
 

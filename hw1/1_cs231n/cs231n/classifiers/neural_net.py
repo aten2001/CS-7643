@@ -80,7 +80,8 @@ def two_layer_net(X, model, y=None, reg=0.0):
   # Store the result in the scores variable, which should be an array of      #
   # shape (N, C).                                                             #
   #############################################################################
-  pass
+  hidden_layer = np.maximum(0, X.dot(W1) + b1)
+  scores = hidden_layer.dot(W2) + b2
   #############################################################################
   #                              END OF YOUR CODE                             #
   #############################################################################
@@ -98,7 +99,15 @@ def two_layer_net(X, model, y=None, reg=0.0):
   # classifier loss. So that your results match ours, multiply the            #
   # regularization loss by 0.5                                                #
   #############################################################################
-  pass
+  socres = scores - np.max(scores, axis = 1, keepdims=True)
+  #numeric instability
+  expScore = np.exp(scores)
+  sum_exp_Score = np.sum(expScore, axis = 1, keepdims = True)
+  P = expScore / sum_exp_Score
+  loss = -np.sum(np.log(P[np.arange(N),y])) / N
+  loss += 0.5 * reg * (np.sum(W1**2)+np.sum(W2**2))
+  
+  
   #############################################################################
   #                              END OF YOUR CODE                             #
   #############################################################################
@@ -110,7 +119,15 @@ def two_layer_net(X, model, y=None, reg=0.0):
   # and biases. Store the results in the grads dictionary. For example,       #
   # grads['W1'] should store the gradient on W1, and be a matrix of same size #
   #############################################################################
-  pass
+  dscores = P.copy()
+  dscores[np.arange(N),y] -= 1
+  grads['W2'] = hidden_layer.T.dot(dscores) / N + reg * W2
+  grads['b2'] = np.sum(dscores, axis = 0) / N
+  hidden_grad = dscores.dot(W2.T)
+  hidden_grad[hidden_layer<=0] = 0
+  grads['W1'] = X.T.dot(hidden_grad) / N + reg * W1
+  grads['b1'] = np.sum(hidden_grad, axis=0) /N
+  
   #############################################################################
   #                              END OF YOUR CODE                             #
   #############################################################################
