@@ -44,9 +44,9 @@ class Softmax(nn.Module):
         #############################################################################
         # TODO: Implement the forward pass. This should take very few lines of code.
         #############################################################################
-        N, C, H, W = image.shape
-        print(self.linear)
-        scores = self.linear(N, -1)
+        N, C, H, W = images.shape
+        #print(self.linear)
+        scores = self.linear(images.view(N, -1))
         #############################################################################
         #                             END OF YOUR CODE                              #
         #############################################################################
