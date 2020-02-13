@@ -19,7 +19,11 @@ class CNN(nn.Module):
         #############################################################################
         # TODO: Initialize anything you need for the forward pass
         #############################################################################
-        pass
+        im_channels, im_height, im_width = im_size
+        self.conv = nn.Conv2d(im_channels, hidden_dim, kernel_size)
+        width_hidden = im_width + 1 - kernel_size
+        height_hidden = im_height +1 -kernel_size
+        self.layer1 = nn.Linear(width_hidden*height_hidden*hidden_dim, n_classes)
         #############################################################################
         #                             END OF YOUR CODE                              #
         #############################################################################
@@ -44,7 +48,9 @@ class CNN(nn.Module):
         #############################################################################
         # TODO: Implement the forward pass. This should take few lines of code.
         #############################################################################
-        pass
+        N, C, H, W = images.shape
+        hidden_flat = F.relu(self.conv(images)).view(N, -1)
+        scores = self.layer1(hidden_flat)
         #############################################################################
         #                             END OF YOUR CODE                              #
         #############################################################################

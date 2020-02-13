@@ -53,7 +53,10 @@ args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
 torch.manual_seed(args.seed)
 if args.cuda:
+    print("Yes")
     torch.cuda.manual_seed(args.seed)
+else:
+    print("No")
 
 # Load CIFAR10 using torch data paradigm
 kwargs = {'num_workers': 1, 'pin_memory': True} if args.cuda else {}
@@ -109,7 +112,10 @@ if args.cuda:
 # appropriate hyperparameters found in args. This only requires one line.
 #############################################################################
 # optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
+#print(model.parameters())
 optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum,weight_decay=args.weight_decay)
+
+#lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=30*len(train_loader), gamma=0.1)
 #############################################################################
 #                             END OF YOUR CODE                              #
 #############################################################################
@@ -137,7 +143,7 @@ def train(epoch):
         loss = criterion(probs, targets)
         loss.backward()
         optimizer.step()
-        
+        #lr_scheduler.step()
         #############################################################################
         #                             END OF YOUR CODE                              #
         #############################################################################
